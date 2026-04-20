@@ -40,6 +40,12 @@ target_include_directories(mimicssl-md5-shared PUBLIC
 set_target_properties(mimicssl-md5-shared
     PROPERTIES OUTPUT_NAME mimicssl-md5)
 
+# Android 16 KB page size support (required for Google Play since Nov 2025)
+# NDK r28+ compiles with 16 KB alignment by default; this flag covers r26/r27.
+if(ANDROID)
+    target_link_options(mimicssl-md5-shared PRIVATE -Wl,-z,max-page-size=16384)
+endif()
+
 include(GNUInstallDirs)
 install(TARGETS mimicssl-md5 DESTINATION lib)
 install(TARGETS mimicssl-md5-shared DESTINATION lib)
